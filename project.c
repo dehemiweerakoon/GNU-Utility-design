@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include <ctype.h>
 #define A 18.5  //for  year
 #define B 16    //for  year
 #define C 28    //for  year
@@ -113,7 +114,7 @@ void main()
             closeAccount();
             break;
         default:
-          printf("Thank You Program Closed");
+            printf("Thank You Program Closed");
             exit(0);
         }
 
@@ -125,11 +126,16 @@ void open()
     int n_acc;
     FILE *fi;
     printf("\nHow many accounts do you want to open:");
-    scanf("%d",&n_acc);
+    scanf(" %d",&n_acc);
     account_holder* customers;
     customers=(account_holder*)calloc(n_acc,sizeof(account_holder));
     fi=fopen("Account.txt","a");
 
+    if (fi == NULL)
+    {
+        fprintf(stderr, "Error opening the file: %s\n","Account.txt" );
+        return 1;
+    }
     for(int i=0; i<n_acc; i++)
     {
         printf("\nEnter Account NO:");
@@ -146,8 +152,10 @@ void open()
             printf("\nEnter holders balance:");
             scanf(" %f",&customers[i].balance);
         }
+        printf(" \n");
         printf("\nEnter Account Type:(Saving Account---(S)/Loan Account---(L):");
         scanf(" %c",&customers[i].account_type);
+        customers[i].account_type=toupper(customers[i].account_type);
         toupper(customers[i].account_type);
         if(customers[i].account_type=='L')
         {
@@ -184,27 +192,29 @@ t:
             printf("\n4.4 year");
             printf("\n5.5 year");
             printf("\nPayable years:");
-            scanf("%d",&y);
+            scanf( "%d",&y);
             customers[i].have_to_pay=(customers[i].amount*(customers[i].interest_rate/100)*y)+customers[i].amount;
 
         }
         fwrite(&customers[i],sizeof(account_holder),1,fi);
-        fclose(fi);
-        free(customers);
+
     }
+    fclose(fi);
+    free(customers);
 }
 void display()
 {
-
+  printf("Account No |       Name            |   Balance      | Gender | Type  | Loan Amount  | Full Payment    | Int Rate ");
+    printf("\n--------------------------------------------------------------");
     account_holder a;
     FILE *pi;
-    pi=fopen("Account.txt","r");
-    while(fread(&a,sizeof(account_holder),1,pi))
+    pi = fopen("Account.txt", "r");
+    while (fread(&a, sizeof(account_holder), 1, pi))
     {
-        printf("\n%-10s| %-20s | %-15.3f | %-6s | %-c  |",a.account_no,a.name,a.balance,a.gender,a.account_type);
-        if(a.amount!=0)
+        printf("\n%-10s | %-20s | %15.3f | %-6s |   %c   |", a.account_no, a.name, a.balance, a.gender, a.account_type);
+        if (a.amount != 0)
         {
-            printf("  %-10.3f  |  %-15.3f | %-3.1f  |",a.amount,a.have_to_pay,a.interest_rate);
+            printf(" %11.3f | %15.3f | %3.1f", a.amount, a.have_to_pay, a.interest_rate);
         }
     }
     fclose(pi);
@@ -221,6 +231,16 @@ void ChangeProfile() //changing profile means the update of name and the gender 
     FILE *t;
     pi=fopen("Account.txt","r");
     t=fopen("t.txt","a");
+    if (pi == NULL)
+    {
+        fprintf(stderr, "Error opening the file: %s\n", "Account.txt");
+        return 1;
+    }
+    if (pi == NULL)
+    {
+        fprintf(stderr, "Error opening the file: %s\n", "t.txt");
+        return 1;
+    }
     while(fread(&a1,sizeof(account_holder),1,pi))
     {
         if(!strcmp(acc,a1.account_no))
@@ -263,6 +283,16 @@ void Deposit_withDrowl()
     FILE *t;
     pi=fopen("Account.txt","r");
     t=fopen("t.txt","a");
+    if (pi == NULL)
+    {
+        fprintf(stderr, "Error opening the file: %s\n","Account.txt");
+        return 1;
+    }
+    if (t == NULL)
+    {
+        fprintf(stderr, "Error opening the file: %s\n", "t.txt");
+        return 1;
+    }
     while(fread(&a1,sizeof(account_holder),1,pi))
     {
         if(!strcmp(acc,a1.account_no))
@@ -328,6 +358,11 @@ void  searchAccount()
     account_holder a1;
     FILE *pi;
     pi=fopen("Account.txt","r");
+    if (pi == NULL)
+    {
+        fprintf(stderr, "Error opening the file: %s\n", "Account.txt");
+        return 1;
+    }
     while(fread(&a1,sizeof(account_holder),1,pi))
     {
         if(!strcmp(acc,a1.account_no))
@@ -363,6 +398,16 @@ loan:
     FILE *t;
     pi=fopen("Account.txt","r");
     t=fopen("t.txt","a");
+    if (pi == NULL)
+    {
+        fprintf(stderr, "Error opening the file: %s\n", "Account.txt");
+        return 1;
+    }
+    if (t == NULL)
+    {
+        fprintf(stderr, "Error opening the file: %s\n", "t.txt");
+        return 1;
+    }
     while(fread(&a1,sizeof(account_holder),1,pi))
     {
         found=1;
@@ -471,51 +516,72 @@ t:
 }
 void closeAccount()
 {
-    int found=0;
-    char acc[10];
-    printf("What account you want to close:");
-    scanf(" %[^\n]",acc);
-    account_holder a1;
-    FILE *pi;
-    FILE *t;
-    pi=fopen("Account.txt","r");
-    t=fopen("t.txt","a");
-    while(fread(&a1,sizeof(account_holder),1,pi))
+    while(1)
     {
-        if(!strcmp(acc,a1.account_no))
+        int found=0;
+        char acc[10];
+        printf("What account you want to close:");
+        scanf(" %[^\n]",acc);
+        account_holder a1;
+        FILE *pi;
+        FILE *t;
+        pi=fopen("Account.txt","r");
+        t=fopen("t.txt","a");
+        if (pi == NULL)
         {
-            found=1;
-            printf("\n---------------------------------------------------------------------");
-            printf("\nAccount No:%s",a1.account_no);
-            printf("\nHolders Name:%s",a1.name);
-            printf("\nGender :%s",a1.gender);
-            printf("\nCurrent Balance:%f",a1.balance);
-            printf("\nAccount type:%c",a1.account_type);
-            if(a1.have_to_pay!=0)
-            {
-                printf("\nLoan Amount:%f",a1.amount);
-                printf("\nLoan amount to pay future:%f",a1.have_to_pay);
-                printf("\nLoan interest rate:%f\n",a1.interest_rate);
-                printf("\nYOU HAVE DEBTS YOU CAN NOT CLOSE THE ACCOUNT\n");
-            }
-            else
-            {
-                printf("Successfully closed Account.\nYour balance is %f \n",a1.balance);
-                printf("Thank you");
-                continue;
-            }
-
+            fprintf(stderr, "Error opening the file: %s\n","Account.txt");
+            return 1;
         }
-        fwrite(&a1, sizeof(account_holder), 1, t);
-    }
-    if(found==0)
-    {
-        printf("\nThere is no such Account\n");
-    }
-    fclose(pi);
-    fclose(t);
-    remove("Account.txt");
-    rename("t.txt","Account.txt");
-    return ;
-}
+        if (t == NULL)
+        {
+            fprintf(stderr, "Error opening the file: %s\n","t.txt");
+            return 1;
+        }
+        while(fread(&a1,sizeof(account_holder),1,pi))
+        {
+            if(!strcmp(acc,a1.account_no))
+            {
+                found=1;
+                printf("\n---------------------------------------------------------------------");
+                printf("\nAccount No:%s",a1.account_no);
+                printf("\nHolders Name:%s",a1.name);
+                printf("\nGender :%s",a1.gender);
+                printf("\nCurrent Balance:%f",a1.balance);
+                printf("\nAccount type:%c",a1.account_type);
+                if(a1.have_to_pay!=0)
+                {
+                    printf("\nLoan Amount:%f",a1.amount);
+                    printf("\nLoan amount to pay future:%f",a1.have_to_pay);
+                    printf("\nLoan interest rate:%f\n",a1.interest_rate);
+                    printf("\nYOU HAVE DEBTS YOU CAN NOT CLOSE THE ACCOUNT\n");
+                }
+                else
+                {
+                    printf("Successfully closed Account.\nYour balance is %f \n",a1.balance);
+                    printf("\nThank you");
+                     printf("\n---------------------------------------------------------------------\n");
+                    continue;
+                }
 
+            }
+            fwrite(&a1, sizeof(account_holder), 1, t);
+        }
+        if(found==0)
+        {
+            printf("\nThere is no such Account\n");
+        }
+        fclose(pi);
+        fclose(t);
+        remove("Account.txt");
+        rename("t.txt","Account.txt");
+
+        char d;
+        printf("\n\n\nDo you want to close more accounts(Y/N):");
+        scanf(" %c",&d);
+        if(d=='y' || d=='Y')
+        {
+            continue;
+        }
+        return;
+    }
+}
