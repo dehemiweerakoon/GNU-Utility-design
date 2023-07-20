@@ -205,7 +205,7 @@ t:
 void display()
 {
   printf("Account No |       Name            |   Balance      | Gender | Type  | Loan Amount  | Full Payment    | Int Rate ");
-    printf("\n--------------------------------------------------------------");
+    printf("\n------------------------------------------------------------------------------------------------------------");
     account_holder a;
     FILE *pi;
     pi = fopen("Account.txt", "r");
