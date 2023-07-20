@@ -113,6 +113,7 @@ void main()
             closeAccount();
             break;
         default:
+          printf("Thank You Program Closed");
             exit(0);
         }
 
