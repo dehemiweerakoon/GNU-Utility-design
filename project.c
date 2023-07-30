@@ -131,11 +131,7 @@ void open()
     customers=(account_holder*)calloc(n_acc,sizeof(account_holder));
     fi=fopen("Account.txt","a");
 
-    if (fi == NULL)
-    {
-        printf("Error opening the file: %s\n","Account.txt" );
-        return 1;
-    }
+
     for(int i=0; i<n_acc; i++)
     {
         printf("\n-----------------------------------------------------------------------------------------------------");
@@ -242,11 +238,7 @@ void ChangeProfile() //changing profile means the update of name and the gender 
         printf("Error opening the file: %s\n", "Account.txt");
         return 1;
     }
-    if (pi == NULL)
-    {
-        printf("Error opening the file: %s\n", "t.txt");
-        return 1;
-    }
+
     while(fread(&a1,sizeof(account_holder),1,pi))
     {
         if(!strcmp(acc,a1.account_no))
@@ -294,11 +286,7 @@ void Deposit_withDrowl()
         printf("Error opening the file: %s\n","Account.txt");
         return 1;
     }
-    if (t == NULL)
-    {
-        printf("Error opening the file: %s\n", "t.txt");
-        return 1;
-    }
+
     while(fread(&a1,sizeof(account_holder),1,pi))
     {
         if(!strcmp(acc,a1.account_no))
@@ -409,11 +397,7 @@ loan:
         printf("Error opening the file: %s\n", "Account.txt");
         return 1;
     }
-    if (t == NULL)
-    {
-        printf("Error opening the file: %s\n", "t.txt");
-        return 1;
-    }
+
     while(fread(&a1,sizeof(account_holder),1,pi))
     {
         found=1;
@@ -538,11 +522,7 @@ void closeAccount()
             printf("Error opening the file: %s\n","Account.txt");
             return 1;
         }
-        if (t == NULL)
-        {
-            printf("Error opening the file: %s\n","t.txt");
-            return 1;
-        }
+
         while(fread(&a1,sizeof(account_holder),1,pi))
         {
             if(!strcmp(acc,a1.account_no))
