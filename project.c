@@ -133,7 +133,7 @@ void open()
 
     if (fi == NULL)
     {
-        fprintf(stderr, "Error opening the file: %s\n","Account.txt" );
+        printf("Error opening the file: %s\n","Account.txt" );
         return 1;
     }
     for(int i=0; i<n_acc; i++)
@@ -210,9 +210,14 @@ void display()
     account_holder a;
     FILE *pi;
     pi = fopen("Account.txt", "r");
+    if (pi == NULL)
+    {
+        printf("Error opening the file: %s\n","Account.txt" );
+        return 1;
+    }
     while (fread(&a, sizeof(account_holder), 1, pi))
     {
-        printf("\n%-10s | %-20s | %15.3f | %-6s |   %c   |", a.account_no, a.name, a.balance, a.gender, a.account_type);
+        printf("\n%-10s | %-20s | %16.3f | %-6s |   %c   |", a.account_no, a.name, a.balance, a.gender, a.account_type);
         if (a.amount != 0)
         {
             printf(" %11.3f | %15.3f | %3.1f", a.amount, a.have_to_pay, a.interest_rate);
@@ -234,12 +239,12 @@ void ChangeProfile() //changing profile means the update of name and the gender 
     t=fopen("t.txt","a");
     if (pi == NULL)
     {
-        fprintf(stderr, "Error opening the file: %s\n", "Account.txt");
+        printf("Error opening the file: %s\n", "Account.txt");
         return 1;
     }
     if (pi == NULL)
     {
-        fprintf(stderr, "Error opening the file: %s\n", "t.txt");
+        printf("Error opening the file: %s\n", "t.txt");
         return 1;
     }
     while(fread(&a1,sizeof(account_holder),1,pi))
@@ -286,12 +291,12 @@ void Deposit_withDrowl()
     t=fopen("t.txt","a");
     if (pi == NULL)
     {
-        fprintf(stderr, "Error opening the file: %s\n","Account.txt");
+        printf("Error opening the file: %s\n","Account.txt");
         return 1;
     }
     if (t == NULL)
     {
-        fprintf(stderr, "Error opening the file: %s\n", "t.txt");
+        printf("Error opening the file: %s\n", "t.txt");
         return 1;
     }
     while(fread(&a1,sizeof(account_holder),1,pi))
@@ -361,7 +366,7 @@ void  searchAccount()
     pi=fopen("Account.txt","r");
     if (pi == NULL)
     {
-        fprintf(stderr, "Error opening the file: %s\n", "Account.txt");
+        printf("Error opening the file: %s\n", "Account.txt");
         return 1;
     }
     while(fread(&a1,sizeof(account_holder),1,pi))
@@ -401,12 +406,12 @@ loan:
     t=fopen("t.txt","a");
     if (pi == NULL)
     {
-        fprintf(stderr, "Error opening the file: %s\n", "Account.txt");
+        printf("Error opening the file: %s\n", "Account.txt");
         return 1;
     }
     if (t == NULL)
     {
-        fprintf(stderr, "Error opening the file: %s\n", "t.txt");
+        printf("Error opening the file: %s\n", "t.txt");
         return 1;
     }
     while(fread(&a1,sizeof(account_holder),1,pi))
@@ -530,12 +535,12 @@ void closeAccount()
         t=fopen("t.txt","a");
         if (pi == NULL)
         {
-            fprintf(stderr, "Error opening the file: %s\n","Account.txt");
+            printf("Error opening the file: %s\n","Account.txt");
             return 1;
         }
         if (t == NULL)
         {
-            fprintf(stderr, "Error opening the file: %s\n","t.txt");
+            printf("Error opening the file: %s\n","t.txt");
             return 1;
         }
         while(fread(&a1,sizeof(account_holder),1,pi))
